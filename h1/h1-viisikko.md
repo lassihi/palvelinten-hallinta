@@ -13,21 +13,24 @@ Käyttöjärjestelmä: Windows 11 23H2
 * Karvinen 2023: Run Salt Command Locally
   * Salt komentoa käytetään yleensä useampien orja tietokoneiden samanaikaiseen hallintaan. Saltin ajaminen paikallisesti on hyvä tapa harjoitella sen käyttöä.
   * Saltin käyttö paikallisesti vaati, että orja demoni on asennettua laitteella.
-  * Käyttö paikallisesti: `sudo salt-call --local -l info state.single "toiminto"`. Tärkeimmät toiminnot:
-    *  `pkg.installed "paketti"`, `pkg.removed "paketti"`: paketti tulee olla asennettuna/poistettuna
+  * Käyttö paikallisesti: `sudo salt-call --local -l info state.single "tilafunktio"`. Tärkeimmät tilafunktiot:
+    *  `pkg.installed "paketti"`, `pkg.removed "paketti"`: paketti tulee olla asennettuna/ei asennettuna
     *  `file.managed "tiedosto"`, ´file.absent "tiedosto"´: tiedosto tule olla olemassa/ei olemassa
     *  `service.running "demoni" state=True`, `service.dead "demoni" state=False`: demonin tulee olla käynnissä/ei käynnissä
     *  `user.present "käyttäjä"`, `user.absent "käyttäjä"`: käyttäjä tulee olla olemassa/ei olemassa
     *  `cmd.run "komento"`: ajaa komennon
+  * Oma kommentti/huomio:
    
 * Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux
   * Salt master ohjaa orjia ja sillä tulee olla julkinen palvelin, jonka IP-osoite tulee olla orjien tiedossa ja reikä palomuurissa 4505/tcp ja 4506/tcp.
   * Orjille määritetään master palvelimen IP-osoite ja id, jotta ne voivat hakea tiedot masterilta.
   * Master palvelimen tulee hyväksyä orjan liittyminen verkkoon, jonka jälkeen se voi antaa komentoja orjille, `sudo salt ´*´ ...`
+  * Oma kommentti/huomio:
 
 * Karvinen 2006: Raportin kirjoittaminen
   * Raportissa kerrotaan mitä tehtiin ja mitä tapahtui. Sen tulee olla toistettava, täsmällinen ja helppolukuinen.
   * Raporttia kirjoitetaan jotta muistetaan jälkikäteen mitä on tehty, ajatusten selkeyttämiseksi ja muita auttamaan.
+  * Oma kommentti/huomio:
 
 * VMWare Inc: Salt Install Guide: Linux (DEB) (poimi vain olennainen osa)
   * Salt repositoryn paketit (master, minion...) eivät kuuluu oletuksena Debianin paketinhallinnan paketteihin.
@@ -37,14 +40,13 @@ Käyttöjärjestelmä: Windows 11 23H2
     * lisättävä Salt repon paketit paketinhallintaan: `curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources`
     * päivitettävä saatavilla olevat paketit: `sudo apt-get update`
   * Asenna master ja minion: `sudo apt-get install salt-master`, `sudo apt-get install salt-minion`
+  * Oma kommentti/huomio:
 
 ## a) Asenna Debian 12-Bookworm virtuaalikoneeseen. (Poikkeuksellisesti tätä alakohtaa ei tarvitse raportoida, jos siinä ei ole mitään ongelmia...)
 
 Tein uuden virtuaalikoneen VirtualBoxilla, jonka käyttöjärjestelmäksi asetin Debian 12 Bookwormin. 
 
-Asensin tämän lisäksi Debian 12 virtuaalikoneen M2 MacBook Airiin. Tässä tapauksessa käytin asennukseen debian-12.10.0-arm64-netinst.iso teidostoa ja virtualisointiohjelmistona toimi UTM. Tämän raportin tehtävät on kuitenkin tehty suoritusympäristössä kuvatulla koneella.
-
-
+Tämän lisäksi asensin Debian 12 virtuaalikoneen M2 MacBook Airiin mahdollisia tulevia tarpeita varten. Tässä tapauksessa käytin asennukseen debian-12.10.0-arm64-netinst.iso teidostoa ja virtualisointiohjelmistona toimi UTM. Tämän raportin tehtävät on kuitenkin tehty suoritusympäristössä kuvatulla koneella.
 
  ## Lähteet
 Karvinen 2025: Palvelinten Hallinta: https://terokarvinen.com/palvelinten-hallinta/
