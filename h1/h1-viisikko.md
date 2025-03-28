@@ -43,12 +43,31 @@ Käyttöjärjestelmä: Windows 11 23H2
   * Oma kommentti/huomio:
 
 ## a) Asenna Debian 12-Bookworm virtuaalikoneeseen. (Poikkeuksellisesti tätä alakohtaa ei tarvitse raportoida, jos siinä ei ole mitään ongelmia...)
-
 Tein uuden virtuaalikoneen VirtualBoxilla, jonka käyttöjärjestelmäksi asetin Debian 12 Bookwormin. 
 
 Tämän lisäksi asensin Debian 12 virtuaalikoneen M2 MacBook Airiin mahdollisia tulevia tarpeita varten. Tässä tapauksessa käytin asennukseen debian-12.10.0-arm64-netinst.iso teidostoa ja virtualisointiohjelmistona toimi UTM. Tämän raportin tehtävät on kuitenkin tehty suoritusympäristössä kuvatulla koneella.
 
- ## Lähteet
+## b) Asenna Salt (salt-minion) Linuxille (uuteen virtuaalikoneeseesi).
+Avasin virtuaalikoneen terminaalin ja ajoin komennot `sudo apt-get update` ja `sudo apt-get dist-upgrade` varmistaakseni, että päivitykset ovat ajan tasalla.
+
+Varmistin, että avainrengashakemisto on olemassa.
+
+![image](https://github.com/user-attachments/assets/c564a599-27db-4b69-a235-343f346c6871)
+
+Hain Salt repositoryn julkisen avaimen ja lisäsin sen avainrenkaaseen.
+
+![image](https://github.com/user-attachments/assets/fc57cfdc-2823-452f-8f0f-c813516e2122)
+
+Lisäsin paketit pektinhallintaan.
+
+![image](https://github.com/user-attachments/assets/37250efb-c9f0-41d7-8e25-4a88ce8ce73a)
+
+Päivitin paketit uudestaan
+
+![image](https://github.com/user-attachments/assets/25de00ed-1cb7-4f91-b293-dabac79ea297)
+
+
+## Lähteet
 Karvinen 2025: Palvelinten Hallinta: https://terokarvinen.com/palvelinten-hallinta/
 
 Karvinen 2023: Run Salt Command Locally: https://terokarvinen.com/2021/salt-run-command-locally/
