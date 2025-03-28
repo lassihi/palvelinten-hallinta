@@ -10,7 +10,7 @@ Tietokone: Lenovo Legion Y540-15IRH kannettava kytkettynä langallisesti kotiver
 Käyttöjärjestelmä: Windows 11 23H2
 
 ## x) Lue ja tiivistä 
-* Karvinen 2023: Run Salt Command Locally
+Karvinen 2023: Run Salt Command Locally
   * Salt komentoa käytetään yleensä useampien orja tietokoneiden samanaikaiseen hallintaan. Saltin ajaminen paikallisesti on hyvä tapa harjoitella sen käyttöä.
   * Saltin käyttö paikallisesti vaati, että orja demoni on asennettua laitteella.
   * Käyttö paikallisesti: `sudo salt-call --local -l info state.single "tilafunktio"`. Tärkeimmät tilafunktiot:
@@ -20,19 +20,19 @@ Käyttöjärjestelmä: Windows 11 23H2
     *  `user.present "käyttäjä"`, `user.absent "käyttäjä"`: käyttäjä tulee olla olemassa/ei olemassa
     *  `cmd.run "komento"`: ajaa komennon
   * Oma kommentti/huomio:
-   
-* Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux
+
+Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux
   * Salt master ohjaa orjia ja sillä tulee olla julkinen palvelin, jonka IP-osoite tulee olla orjien tiedossa ja reikä palomuurissa 4505/tcp ja 4506/tcp.
   * Orjille määritetään master palvelimen IP-osoite ja id, jotta ne voivat hakea tiedot masterilta.
   * Master palvelimen tulee hyväksyä orjan liittyminen verkkoon, jonka jälkeen se voi antaa komentoja orjille, `sudo salt ´*´ ...`
   * Oma kommentti/huomio:
 
-* Karvinen 2006: Raportin kirjoittaminen
+Karvinen 2006: Raportin kirjoittaminen
   * Raportissa kerrotaan mitä tehtiin ja mitä tapahtui. Sen tulee olla toistettava, täsmällinen ja helppolukuinen.
   * Raporttia kirjoitetaan jotta muistetaan jälkikäteen mitä on tehty, ajatusten selkeyttämiseksi ja muita auttamaan.
   * Oma kommentti/huomio:
 
-* VMWare Inc: Salt Install Guide: Linux (DEB) (poimi vain olennainen osa)
+VMWare Inc: Salt Install Guide: Linux (DEB) (poimi vain olennainen osa)
   * Salt repositoryn paketit (master, minion...) eivät kuuluu oletuksena Debianin paketinhallinnan paketteihin.
   * Jotta Salt-paketit voi asentaa paketinhallinnan avulla, on ensiksi:
     * varmistettava, että hakemisto avainrenkaille on olemassa: `mkdir -p /etc/apt/keyrings`
