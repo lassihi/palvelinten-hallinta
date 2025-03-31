@@ -129,7 +129,8 @@ Poistin luomani käyttäjän `user.absent "käyttäjä"` tilafunktiolla. Varmist
 
 Idempotentin määritelmä [Wikipedian mukaan](https://en.wikipedia.org/wiki/Idempotence): "Idempotence is the property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application." Eli toiminto on idempotentti, jos se tuottaa saman lopputuloksen riippumatta siitä kuinka monta kertaa toiminnon toistaa.
 
-Mielestäni kaikki muut esitellyt tilafunktiot paitsi `cmd.run` ovat oletuksena idempotentteja, sillä ne kuvaavat järjestelmän lopputilaa. Salt-tulosteesta idempotentti voidaan varmistaa jos ensimmäisen suorituskerran jälkeen komennon uudelleenajettaessa lopputulos on yhä onnistunut (Succeeded: 1), eikä järjestelmään tehty muutoksia. Esimerkiksi jos ajetaan tilafunktion `pkg.installed tree` komento uudestaan.
+Mielestäni kaikki muut esitellyt tilafunktiot paitsi `cmd.run` ovat oletuksena idempotentteja, sillä ne kuvaavat järjestelmän lopputilaa.
+Esimerkiksi jos ajetaan tilafunktion `pkg.installed tree` komento uudestaan.
 
 ![image](https://github.com/user-attachments/assets/298bf54a-6439-4b89-b628-24af79774600)
 
