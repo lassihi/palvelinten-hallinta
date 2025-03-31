@@ -1,5 +1,5 @@
 # Harjoitus 1: Viisikko
-Kurssi: https://terokarvinen.com/palvelinten-hallinta/
+Kurssi: https://terokarvinen.com/palvelinten-hallinta/ \
 Tehtävänanto: https://terokarvinen.com/palvelinten-hallinta/#h1-viisikko
 
 ## Suoritusympäristö
@@ -12,35 +12,32 @@ Käyttöjärjestelmä: Windows 11 23H2
 ## x) Lue ja tiivistä 
 Karvinen 2023: Run Salt Command Locally
   * Salt komentoa käytetään yleensä useampien orja tietokoneiden samanaikaiseen hallintaan. Saltin ajaminen paikallisesti on hyvä tapa harjoitella sen käyttöä.
-  * Saltin käyttö paikallisesti vaati, että orja demoni on asennettua laitteella.
+  * Saltin käyttö paikallisesti vaati, että orja demoni (salt-minion) on asennettua laitteella.
   * Käyttö paikallisesti: `sudo salt-call --local -l info state.single "tilafunktio"`. Tärkeimmät tilafunktiot:
     *  `pkg.installed "paketti"`, `pkg.removed "paketti"`: paketti tulee olla asennettuna/ei asennettuna
     *  `file.managed "tiedosto"`, `file.absent "tiedosto"`: tiedosto tule olla olemassa/ei olemassa
     *  `service.running "demoni" state=True`, `service.dead "demoni" state=False`: demonin tulee olla käynnissä/ei käynnissä
     *  `user.present "käyttäjä"`, `user.absent "käyttäjä"`: käyttäjä tulee olla olemassa/ei olemassa
     *  `cmd.run "komento"`: ajaa komennon
-  * Oma kommentti/huomio:
+  * Artikkelin Salt-asennusohje ei toimi Debianissa.
 
 Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux
   * Salt master ohjaa orjia ja sillä tulee olla julkinen palvelin, jonka IP-osoite tulee olla orjien tiedossa ja reikä palomuurissa 4505/tcp ja 4506/tcp.
   * Orjille määritetään master palvelimen IP-osoite ja id, jotta ne voivat hakea tiedot masterilta.
   * Master palvelimen tulee hyväksyä orjan liittyminen verkkoon, jonka jälkeen se voi antaa komentoja orjille, `sudo salt ´*´ ...`
-  * Oma kommentti/huomio:
 
 Karvinen 2006: Raportin kirjoittaminen
   * Raportissa kerrotaan mitä tehtiin ja mitä tapahtui. Sen tulee olla toistettava, täsmällinen ja helppolukuinen.
   * Raporttia kirjoitetaan jotta muistetaan jälkikäteen mitä on tehty, ajatusten selkeyttämiseksi ja muita auttamaan.
-  * Oma kommentti/huomio:
 
 VMWare Inc: Salt Install Guide: Linux (DEB) (poimi vain olennainen osa)
-  * Salt repositoryn paketit (master, minion...) eivät kuuluu oletuksena Debianin paketinhallinnan paketteihin.
+  * Salt-paketit (master, minion...) eivät kuuluu oletuksena Debianin paketinhallinnan paketteihin.
   * Jotta Salt-paketit voi asentaa paketinhallinnan avulla, on ensiksi:
     * varmistettava, että hakemisto avainrenkaille on olemassa: `mkdir -p /etc/apt/keyrings`
     * ladatta julkinen avain ja lisättävä se avainrenkaaseen: `curl -fsSL https://packages.broadcom.com/artifactory/api/security/keypair/SaltProjectKey/public | sudo tee /etc/apt/keyrings/salt-archive-keyring.pgp`
-    * lisättävä Salt repon paketit paketinhallintaan: `curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources`
+    * lisättävä Salt-paketit paketinhallintaan: `curl -fsSL https://github.com/saltstack/salt-install-guide/releases/latest/download/salt.sources | sudo tee /etc/apt/sources.list.d/salt.sources`
     * päivitettävä saatavilla olevat paketit: `sudo apt-get update`
   * Asenna master ja minion: `sudo apt-get install salt-master`, `sudo apt-get install salt-minion`
-  * Oma kommentti/huomio:
 
 ## a) Asenna Debian 12-Bookworm virtuaalikoneeseen. (Poikkeuksellisesti tätä alakohtaa ei tarvitse raportoida, jos siinä ei ole mitään ongelmia...)
 Tein uuden virtuaalikoneen VirtualBoxilla, jonka käyttöjärjestelmäksi asetin Debian 12 Bookwormin. 
@@ -78,17 +75,17 @@ Ensiksi asensin uuden paketin tilafunktiolla `pkg.installed "paketti"`. Asensin 
 
 ![image](https://github.com/user-attachments/assets/389eb69e-b619-4b0b-a3a7-3027a4f89a33)
 
-Tulosteesta huomataan, että komento onnistui
+Komennon tulosteessa kerrotaan asioita, kuten koska toiminto suoritettiin, kauanko suorittamisessa kesti, päästiinkö haluttuun lopputilaan ja tehtiinkö muutoksia lopputilan saavuttamiseksi.
 
 ### File
-Luodaan seuraavaksi tiedosto ja poistetaan se, `file.managed "tiedosto"` ja `file.absent "tiedosto"`.
+Luodaan seuraavaksi tiedosto, jonka jälkeen poistetaan se, `file.managed "tiedosto"` ja `file.absent "tiedosto"`.
 
 ![image](https://github.com/user-attachments/assets/36abde9f-2e93-4902-a02c-a2d6725251ba)
 
 ![image](https://github.com/user-attachments/assets/4039c475-158a-4f7b-a2de-7552f1f9d421)
 
 ### Service
-Asensin Apache2 demonin, jotta voin kokeilla demonin hallintaa. Ajoin komennon `sudo salt-call --local -l info state.single pkg.installed apache2` apachen asentamiseksi saltilla. Komennosta seurasi hyvin pitkä tuloste, mutta alla sen yhteenveto.
+Asensin Apache2 demonin, jotta voin testata demonin hallintaa. Ajoin komennon `sudo salt-call --local -l info state.single pkg.installed apache2` apachen asentamiseksi saltilla. Komennosta seurasi hyvin pitkä tuloste, mutta alla sen yhteenveto.
 
 ![image](https://github.com/user-attachments/assets/061b740e-f6d6-4a3a-b841-a94336e6d3c0)
 
@@ -124,10 +121,23 @@ Poistin luomani käyttäjän `user.absent "käyttäjä"` tilafunktiolla. Varmist
 ![image](https://github.com/user-attachments/assets/5c369b2a-8fec-40b3-a0fa-773284406464)
 
 ### Cmd
+`cmd.run "komento"` mahdollistaa komentorivikomentojen suorittamisen.
+
+![image](https://github.com/user-attachments/assets/4a7591cd-1a38-488b-8ce0-256c30cc59e5)
+
 ## d) Idempotentti. Anna esimerkki idempotenssista. Aja 'salt-call --local' komentoja, analysoi tulokset, selitä miten idempotenssi ilmenee.
 
-Impotenssin määritelmä [Wikipedian mukaan](https://en.wikipedia.org/wiki/Idempotence): "Idempotence is the property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application."
+Idempotentin määritelmä [Wikipedian mukaan](https://en.wikipedia.org/wiki/Idempotence): "Idempotence is the property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application." Eli toiminto on idempotentti, jos se tuottaa saman lopputuloksen riippumatta siitä kuinka monta kertaa toiminnon toistaa.
 
+Mielestäni kaikki muut esitellyt tilafunktiot paitsi `cmd.run` ovat oletuksena idempotentteja, sillä ne kuvaavat järjestelmän lopputilaa. Salt-tulosteesta idempotentti voidaan varmistaa jos ensimmäisen suorituskerran jälkeen komennon uudelleenajettaessa lopputulos on yhä onnistunut (Succeeded: 1), eikä järjestelmään tehty muutoksia. Esimerkiksi jos ajetaan tilafunktion `pkg.installed tree` komento uudestaan.
+
+![image](https://github.com/user-attachments/assets/298bf54a-6439-4b89-b628-24af79774600)
+
+Lopputila (tree asennettuna) on onnistunut, eikä järjestelmään tehty muutoksia.
+
+`cmd.run "touch /home/lassihi/Documents/testi.txt"` ei taas ole suoraan idempotentti, sillä joka kerta kun komennon ajaa järjestelmään tehdään muutoksia (tiedoston aikaleima päivitetään).
+
+![image](https://github.com/user-attachments/assets/6a285d9c-03cb-4b3a-a001-128942609be0)
 
 ## Lähteet
 Karvinen 2025: Palvelinten Hallinta: https://terokarvinen.com/palvelinten-hallinta/
@@ -139,3 +149,5 @@ Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux: 
 Karvinen 2006: Raportin kirjoittaminen: https://terokarvinen.com/2006/06/04/raportin-kirjoittaminen-4/
 
 WMWare Inc: Salt Install Guide: Linux (DEB): https://docs.saltproject.io/salt/install-guide/en/latest/topics/install-by-operating-system/linux-deb.html
+
+Wikipedia: Idempotence: https://en.wikipedia.org/wiki/Idempotence
