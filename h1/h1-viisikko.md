@@ -15,7 +15,7 @@ Karvinen 2023: Run Salt Command Locally
   * Saltin käyttö paikallisesti vaati, että orja demoni on asennettua laitteella.
   * Käyttö paikallisesti: `sudo salt-call --local -l info state.single "tilafunktio"`. Tärkeimmät tilafunktiot:
     *  `pkg.installed "paketti"`, `pkg.removed "paketti"`: paketti tulee olla asennettuna/ei asennettuna
-    *  `file.managed "tiedosto"`, ´file.absent "tiedosto"´: tiedosto tule olla olemassa/ei olemassa
+    *  `file.managed "tiedosto"`, `file.absent "tiedosto"`: tiedosto tule olla olemassa/ei olemassa
     *  `service.running "demoni" state=True`, `service.dead "demoni" state=False`: demonin tulee olla käynnissä/ei käynnissä
     *  `user.present "käyttäjä"`, `user.absent "käyttäjä"`: käyttäjä tulee olla olemassa/ei olemassa
     *  `cmd.run "komento"`: ajaa komennon
@@ -52,19 +52,81 @@ Avasin virtuaalikoneen terminaalin ja ajoin komennot `sudo apt-get update` ja `s
 
 Varmistin, että avainrengashakemisto on olemassa.
 
-![image](https://github.com/user-attachments/assets/c564a599-27db-4b69-a235-343f346c6871)
+![image](https://github.com/user-attachments/assets/6b0aedc5-7999-4c22-a7ca-9bb5abb62192)
 
 Hain Salt repositoryn julkisen avaimen ja lisäsin sen avainrenkaaseen.
 
-![image](https://github.com/user-attachments/assets/fc57cfdc-2823-452f-8f0f-c813516e2122)
+![image](https://github.com/user-attachments/assets/4572b408-4b17-4a20-8d3f-c1145cfa0754)
 
-Lisäsin paketit pektinhallintaan.
+Lisäsin paketit paketinhallintaan.
 
-![image](https://github.com/user-attachments/assets/37250efb-c9f0-41d7-8e25-4a88ce8ce73a)
+![image](https://github.com/user-attachments/assets/5cb506a8-fb39-4d53-ab0b-82f586450d14)
 
-Päivitin paketit uudestaan
+Päivitin paketit uudestaan.
 
-![image](https://github.com/user-attachments/assets/25de00ed-1cb7-4f91-b293-dabac79ea297)
+![image](https://github.com/user-attachments/assets/f910f730-3640-4e39-87de-f86e0030bbbd)
+
+Asensin salt-minionin koneeseen.
+
+![image](https://github.com/user-attachments/assets/0385145f-3818-4a1d-a6a3-5d4d66c73ab7)
+
+## c) Viisi tärkeintä. Näytä Linuxissa esimerkit viidestä tärkeimmästä Saltin tilafunktiosta: pkg, file, service, user, cmd. Analysoi ja selitä tulokset.
+Käytän esimerkkeinä tiivistelmässäni kuvaamia tilafunktioita. Kertauksena salt-tilafunktion ajo paikallisesti: `sudo salt-call --local -l info state.single "tilafunktio"`.
+
+### Pkg
+Ensiksi asensin uuden paketin tilafunktiolla `pkg.installed "paketti"`. Asensin sovelluksen tree.
+
+![image](https://github.com/user-attachments/assets/389eb69e-b619-4b0b-a3a7-3027a4f89a33)
+
+Tulosteesta huomataan, että komento onnistui
+
+### File
+Luodaan seuraavaksi tiedosto ja poistetaan se, `file.managed "tiedosto"` ja `file.absent "tiedosto"`.
+
+![image](https://github.com/user-attachments/assets/36abde9f-2e93-4902-a02c-a2d6725251ba)
+
+![image](https://github.com/user-attachments/assets/4039c475-158a-4f7b-a2de-7552f1f9d421)
+
+### Service
+Asensin Apache2 demonin, jotta voin kokeilla demonin hallintaa. Ajoin komennon `sudo salt-call --local -l info state.single pkg.installed apache2` apachen asentamiseksi saltilla. Komennosta seurasi hyvin pitkä tuloste, mutta alla sen yhteenveto.
+
+![image](https://github.com/user-attachments/assets/061b740e-f6d6-4a3a-b841-a94336e6d3c0)
+
+Tarkastin selaimella, että apache on päällä localhost-osoitteessa.
+
+![image](https://github.com/user-attachments/assets/dac1de7e-1e2b-4a51-bf49-4f2e795866b5)
+
+Sammutin apachen tilafunktiolla `service.dead "demoni" state=False`.
+
+![image](https://github.com/user-attachments/assets/5fef7226-4d2f-4011-8446-74f4e145a94a)
+
+Tarkastin selaimella, että apache ei enää ole päällä.
+
+![image](https://github.com/user-attachments/assets/9f423155-4dde-4800-b4c9-ff372a93c20a)
+
+Käynnistin apachen uudelleen tilafunktiolla `service.running "demoni" state=True`.
+
+![image](https://github.com/user-attachments/assets/46bddc44-cc43-4d1d-aa08-435cdc4dc14d)
+
+![image](https://github.com/user-attachments/assets/57a27838-94cc-460f-bc4c-77cbf6df7253)
+
+### User
+Loin uuden käyttäjän `user.present "käyttäjä"` tilafunktiolla.
+
+![image](https://github.com/user-attachments/assets/a64ca1cf-d9d4-4835-8711-d56b436551d5)
+
+Uuden käyttäjän sisäänkirjautuminen on poistettu automaattisesti, jonka voi huomata tiedostosta `/etc/shadow`, sillä käyttäjän salasanakentässä on huutomerkki. Pääkäyttäjän oikeuksin kuitenkin voi tälle kirjautua. 
+
+![image](https://github.com/user-attachments/assets/0a0e7caa-c30c-4edb-9b4d-8026c3033ed4)
+
+Poistin luomani käyttäjän `user.absent "käyttäjä"` tilafunktiolla. Varmistin myös, että käyttäjää ei ole enää olemassa.
+
+![image](https://github.com/user-attachments/assets/5c369b2a-8fec-40b3-a0fa-773284406464)
+
+### Cmd
+## d) Idempotentti. Anna esimerkki idempotenssista. Aja 'salt-call --local' komentoja, analysoi tulokset, selitä miten idempotenssi ilmenee.
+
+Impotenssin määritelmä [Wikipedian mukaan](https://en.wikipedia.org/wiki/Idempotence): "Idempotence is the property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application."
 
 
 ## Lähteet
