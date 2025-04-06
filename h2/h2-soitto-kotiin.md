@@ -169,6 +169,16 @@ Tutkin ohjeet läpi (https://terokarvinen.com/2018/salt-quickstart-salt-stack-ma
 Siirryin tämän jälkeen vm01:lle ja ajoin komennon `sudo salt-key -A`. Master ei vieläkään ollut saanut minionin avainta. 
 
 Asensin ufw palomuuriohjelmiston ja sallin ulkoa tulevan tcp liikenteen portteihin 4505 ja 4506.
+
 ![image](https://github.com/user-attachments/assets/510db6a8-4c4f-4768-85e5-3b66f77ba9fe)
 
+Tämä ei auttanut, salt-master ei vieläkään tunnistanut avaimia.
 
+Testasin saako vm02 yhteyden vm01:n porttiin 4505 tai 4506.
+
+![image](https://github.com/user-attachments/assets/636eb213-cc3c-43d9-a124-c991d17ae073)
+
+Yhteys ei onnistunut.
+
+Kohdasta c) muistin, että koneilla, oli useampi verkkoliitäntä, joten tutkin masterin configuraatiotiedostosta onko se mahdollista asettaa kuuntelemaan vain tiettyä liitäntää.
+![image](https://github.com/user-attachments/assets/28b65624-d12f-4ba9-8278-626f69e5b147)
