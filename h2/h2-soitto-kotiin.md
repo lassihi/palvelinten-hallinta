@@ -10,21 +10,21 @@ Tietokone: Lenovo Legion Y540-15IRH kannettava kytkettynä langallisesti kotiver
 Käyttöjärjestelmä: Windows 11 23H2
 
 ## x) Lue ja tiivistä 
-Karvinen 2021: Two Machine Virtual Network With Debian 11 Bullseye and Vagrant
+Karvinen 2021: [Two Machine Virtual Network With Debian 11 Bullseye and Vagrant](https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/)
 * Vagrant automatisoi virtuaalikoneiden luomisen, niihin yhdistämisen ja niiden tuhoamisen.
 * Vagrantfile määrittelee virtuaalikoneet.
 
-Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux
+Karvinen 2018: [Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux](https://terokarvinen.com/2018/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/?fromSearch=salt%20quickstart%20salt%20stack%20master%20and%20slave%20on%20ubuntu%20linux)
 * Salt master ohjaa orjia ja sillä tulee olla julkinen palvelin, jonka IP-osoite tulee olla orjien tiedossa ja reikä palomuurissa 4505/tcp ja 4506/tcp.
 * Orjille määritetään master palvelimen IP-osoite ja id, jotta ne voivat hakea tiedot masterilta.
 * Master palvelimen tulee hyväksyä orjan liittyminen verkkoon, jonka jälkeen se voi antaa komentoja orjille, `sudo salt ´*´ ...`
 
-Karvinen 2023: Salt Vagrant - automatically provision one master and two slaves
+Karvinen 2023: [Salt Vagrant - automatically provision one master and two slaves](https://terokarvinen.com/2023/salt-vagrant/)
 * init.sls tiedoston avulla voidaan luoda omia tiloja.
 * top.sls määrittää mitkä tilat ajetaan kussakin orjassa.
 
 ## a) Hello Vagrant! Osoita jollain komennolla, että Vagrant on asennettu (esim tulostaa vagrantin versionumeron).
-Vagrant ei ollut asennettuna entuudestaan, joten asensins sen installerin osoitteesta https://developer.hashicorp.com/vagrant/install?product_intent=vagrant#windows. Asennus installerissa vaati lisenssiehtojen hyväksymisen ja uudelleenkäynnistyksen. Uudelleenkäynnistyksen jälkeen Vagrant oli asennettuna.
+Vagrant ei ollut asennettuna entuudestaan, joten asensin sen installerin osoitteesta https://developer.hashicorp.com/vagrant/install?product_intent=vagrant#windows. Asennus installerissa vaati lisenssiehtojen hyväksymisen ja uudelleenkäynnistyksen. Uudelleenkäynnistyksen jälkeen Vagrant oli asennettuna.
 
 Ajoin komennon `vagrant --version` PowerShellillä vagrant version tulostamiseksi.
 
@@ -205,6 +205,8 @@ Toinen tila: paketti tree asennettuna.
 Tulosteesta huomataan, että tila saavutettiin ilman muutoksia. Tämä johtuu siitä, että Vagrantfilessä oli määritetty paketti tree asennettavaksi koneen luontivaiheessa.
 
 ## Lähteet:
+Karvinen 2025: Palvelinten hallinta: https://terokarvinen.com/palvelinten-hallinta/
+
 Karvinen 2021: Two Machine Virtual Network With Debian 11 Bullseye and Vagrant: https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/
 
 Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux: https://terokarvinen.com/2018/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/?fromSearch=salt%20quickstart%20salt%20stack%20master%20and%20slave%20on%20ubuntu%20linux
