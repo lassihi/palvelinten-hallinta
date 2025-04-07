@@ -20,6 +20,8 @@ Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux
 * Master palvelimen tulee hyväksyä orjan liittyminen verkkoon, jonka jälkeen se voi antaa komentoja orjille, `sudo salt ´*´ ...`
 
 Karvinen 2023: Salt Vagrant - automatically provision one master and two slaves
+* init.sls tiedoston avulla voidaan luoda omia tiloja.
+* top.sls määrittää mitkä tilat ajetaan kussakin orjassa.
 
 ## a) Hello Vagrant! Osoita jollain komennolla, että Vagrant on asennettu (esim tulostaa vagrantin versionumeron).
 Vagrant ei ollut asennettuna entuudestaan, joten asensins sen installerin osoitteesta https://developer.hashicorp.com/vagrant/install?product_intent=vagrant#windows. Asennus installerissa vaati lisenssiehtojen hyväksymisen ja uudelleenkäynnistyksen. Uudelleenkäynnistyksen jälkeen Vagrant oli asennettuna.
@@ -173,12 +175,6 @@ Asensin ufw palomuuriohjelmiston ja sallin ulkoa tulevan tcp liikenteen portteih
 ![image](https://github.com/user-attachments/assets/510db6a8-4c4f-4768-85e5-3b66f77ba9fe)
 
 Tämä ei auttanut, salt-master ei vieläkään tunnistanut avaimia.
-
-Testasin saako vm02 yhteyden vm01:n porttiin 4505 tai 4506.
-
-![image](https://github.com/user-attachments/assets/636eb213-cc3c-43d9-a124-c991d17ae073)
-
-Yhteys ei onnistunut.
 
 Tässä kohtaa lopetin tehtävän suorittamisen päivältä ja sammutin host-koneen. Seuraavana päivänä jatkoin tehtävää ja käynnistettyäni virtuaalikoneet ajoin ensitöikseni `sudo salt-key -A` komennon vm01:llä. 
 
