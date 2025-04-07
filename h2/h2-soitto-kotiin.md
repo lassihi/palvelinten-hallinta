@@ -180,5 +180,37 @@ Testasin saako vm02 yhteyden vm01:n porttiin 4505 tai 4506.
 
 Yhteys ei onnistunut.
 
-Kohdasta c) muistin, että koneilla, oli useampi verkkoliitäntä, joten tutkin masterin configuraatiotiedostosta onko se mahdollista asettaa kuuntelemaan vain tiettyä liitäntää.
-![image](https://github.com/user-attachments/assets/28b65624-d12f-4ba9-8278-626f69e5b147)
+Tässä kohtaa lopetin tehtävän suorittamisen päivältä ja sammutin host-koneen. Seuraavana päivänä jatkoin tehtävää ja käynnistettyäni virtuaalikoneet ajoin ensitöikseni `sudo salt-key -A` komennon vm01:llä. 
+
+![image](https://github.com/user-attachments/assets/6ec9a37e-0eaf-458d-92fc-1b6ea749d41b)
+
+Ilmeisesti joko host-koneen tai virtuaalikoneiden boottaaminen oli korjannut ongelman. Hyväksyin minionin avaimen.
+
+Kokeilin toimiiko salt tulostamalla orjan hostnamen.
+
+![image](https://github.com/user-attachments/assets/515dc499-d110-46df-8cb8-bb6b94e4fcc3)
+
+Orjalta tuli oikea vastaus.
+
+## e) Kokeile vähintään kahta tilaa verkon yli (viisikosta: pkg, file, service, user, cmd)
+
+Ensimmäiseksi tilaksi määritin: tiedosto /home/vagrant/moi, joka sisältää "helou". 
+
+![image](https://github.com/user-attachments/assets/7e990031-a70f-4c02-a38e-f61aaf70c63c)
+
+Tulosteen perusteella orja saavutti tilan ajettuaan muutokset. Tarkastin manuaalisesi, että tiedosto luotiin.
+
+![image](https://github.com/user-attachments/assets/cfe9e7bb-0a9e-491a-97d5-caeb8a263bfc)
+
+Toinen tila: paketti tree asennettuna.
+
+![image](https://github.com/user-attachments/assets/e8ad9c8d-3465-4b05-9822-818b69df5820)
+
+Tulosteesta huomataan, että tila saavutettiin ilman muutoksia. Tämä johtuu siitä, että Vagrantfilessä oli määritetty paketti tree asennettavaksi koneen luontivaiheessa.
+
+## Lähteet:
+Karvinen 2021: Two Machine Virtual Network With Debian 11 Bullseye and Vagrant: https://terokarvinen.com/2021/two-machine-virtual-network-with-debian-11-bullseye-and-vagrant/
+
+Karvinen 2018: Salt Quickstart – Salt Stack Master and Slave on Ubuntu Linux: https://terokarvinen.com/2018/salt-quickstart-salt-stack-master-and-slave-on-ubuntu-linux/?fromSearch=salt%20quickstart%20salt%20stack%20master%20and%20slave%20on%20ubuntu%20linux
+
+Karvinen 2023: Salt Vagrant - automatically provision one master and two slaves: https://terokarvinen.com/2023/salt-vagrant/
