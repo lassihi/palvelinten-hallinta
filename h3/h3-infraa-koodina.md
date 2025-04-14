@@ -48,7 +48,7 @@ Yhdistin viime tehtävässä Vagrantilla luotuun vm01 virtuaalikoneeseen.
 
 Virtuaalikoneella päivitin paketit `sudo apt-get update` ja asensin Micron `sudo apt-get install micro`.
 
-Teron Hello Salt Infra-as-Code ohjeiden mukaan loin uudelle moduulille "hello-salt" hakemiston, polkuun `/srv/salt/`.
+[Hello Salt Infra-as-Code](https://terokarvinen.com/2024/hello-salt-infra-as-code/) ohjeiden mukaan loin uudelle moduulille "hello-salt" hakemiston, polkuun `/srv/salt/`.
 
     sudo mkdir -p /srv/salt/hello-salt/
 
