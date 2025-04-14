@@ -39,3 +39,4 @@ Salt contributors: [Salt overview](https://docs.saltproject.io/salt/user-guide/e
           avain3: arvo3
 * YAML organisoidaan lohkorakenteisiin, joita määrittävät sisennykset (kaksi välilyöntiä on vakio)
   
+## a) Hei infrakoodi! Kokeile paikallisesti (esim 'sudo salt-call --local') infraa koodina. Kirjota sls-tiedosto, joka tekee esimerkkitiedoston /tmp/ -kansioon.
