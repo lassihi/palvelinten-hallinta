@@ -27,7 +27,7 @@ Yhdistin virtuaalikoneeseen vm01.
 
     vagrant ssh vm01
 
-### Apache manuaalisesti
+### Apache manuaalisesti vm01:lle
 
 Avasin curlilla localhost-sivun osoittaakseni, että Apachea ei ole vielä asennettu.
 
@@ -120,3 +120,58 @@ Curl-tulosteen perusteella tämä onnistui.
 
 ### Ensin käsin vm01:lle
 
+Systemd näyttää, että ssh on aktiivinen ja kuuntelee porttia 22.
+
+![image](https://github.com/user-attachments/assets/0e14ed39-99f6-4fd6-aeb3-3deb6c8a51f2)
+
+Lähdin muokkaamaan ssh:n konfiguraatiotiedostoa, `sudoedit /etc/ssh/sshd_config` ja lisäsin tiedostoon alla olevat rivit.
+
+    Port 22
+    Port 2222
+
+Tallensin tiedoston ja käynnistin ssh:n demonin uudelleen, jotta muutokset astuvat voimaan.
+
+    sudo systemctl restart sshd
+
+Uudelleenkäynnistyksen jälkeen ssh:n tulisi kuunnella portteja 22 ja 2222.
+
+![image](https://github.com/user-attachments/assets/19cdbe9f-194a-4646-89fa-df863302809b)
+
+### Sama orjalle pkg-file-service:n avulla.
+Loin uuden moduulin masterilla.
+
+    sudo mkdir -p /srv/salt/ssh_22_2222
+
+Koska olen jo tehnyt masterilla oikeanlaisen konfiguraatiotiedoston, niin kopioin sen moduulin sisään.
+
+    sudo cp /etc/ssh/sshd_config /srv/salt/ssh_22_2222/
+
+Tarkastin, että oikea tiedosto kopioitiin oikeaan sijaintiin.
+
+![image](https://github.com/user-attachments/assets/878b9385-74fa-428b-ba01-c019b8b4e3c2)
+
+Tiedoston kopiointi onnistui, joten loin seuraavaksi init.sls-tiedoston. Tiedoston sisällön loin jälleen sivun https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh ohjeiden pohjalta.
+
+    sudoedit /srv/salt/ssh_22_2222/init.sls
+
+![image](https://github.com/user-attachments/assets/5002c2dd-9a32-44af-ab28-0e5e8163fbd4)
+
+Tiedosto...
+* varmistaa, että openssh-server on asennettuna
+
+      openssh-server:
+        pkg.installed
+
+* varmistaa, että orjan ssh-konfiguraatiotiedosto vastaa masterin tiedostoa `/srv/salt/ssh_22_2222/sshd_config`. Tiedosto on aiemmin luomani tiedosto, joka asettaa ssh:n käyttämään portteja 22 ja 2222.
+
+      /etc/ssh/sshd_config:
+        file.managed
+          - source: salt://ssh_22_2222/sshd_config
+* varmistaa, että sshd on käynnissä ja uudelleenkäynnistää sshd:n aina kun tiedostoa `/etc/ssh/sshd_config` muutetaan.
+
+      sshd:
+        service.running
+          - watch:
+            - file: /etc/ssh/sshd_config
+
+  
