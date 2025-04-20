@@ -154,7 +154,7 @@ Tiedoston kopiointi onnistui, joten loin seuraavaksi init.sls-tiedoston. Tiedost
 
     sudoedit /srv/salt/ssh_22_2222/init.sls
 
-![image](https://github.com/user-attachments/assets/5002c2dd-9a32-44af-ab28-0e5e8163fbd4)
+![image](https://github.com/user-attachments/assets/bbd8bf69-0285-4afd-bad2-b7ac4538d73d)
 
 Tiedosto...
 * varmistaa, että openssh-server on asennettuna
@@ -165,13 +165,25 @@ Tiedosto...
 * varmistaa, että orjan ssh-konfiguraatiotiedosto vastaa masterin tiedostoa `/srv/salt/ssh_22_2222/sshd_config`. Tiedosto on aiemmin luomani tiedosto, joka asettaa ssh:n käyttämään portteja 22 ja 2222.
 
       /etc/ssh/sshd_config:
-        file.managed
+        file.managed:
           - source: salt://ssh_22_2222/sshd_config
 * varmistaa, että sshd on käynnissä ja uudelleenkäynnistää sshd:n aina kun tiedostoa `/etc/ssh/sshd_config` muutetaan.
 
       sshd:
-        service.running
+        service.running:
           - watch:
             - file: /etc/ssh/sshd_config
 
-  
+Ajoin seuraavaksi tilan orjalle.
+
+![image](https://github.com/user-attachments/assets/9db55507-4bc9-41f3-b25b-edcdac2c2db2)
+
+Tulosteen perustella tila onnistui, eli sshd:n tulisi nyt kuunnella portteja 22 ja 2222 koneella vm02. Kävin vm02:lla tarkastamassa tämän.
+
+![image](https://github.com/user-attachments/assets/19e85be4-7b4e-45b5-ace0-60119fd57f11)
+
+Systemd näytti, että vm02:n sshd kuuntelee portteja 22 ja 2222.
+
+## c) Vapaaehtoinen, haastavahko tässä vaiheessa: Asenna ja konfiguroi Apache ja Name Based Virtual Host. Sen tulee näyttää palvelimen etusivulla weppisivua. Weppisivun tulee olla muokattavissa käyttäjän oikeuksin, ilman sudoa.
+
+## d) Vapaaehtoinen, haastava: Caddy. Asenna Caddy tarjoilemaan weppisivua. Weppisivun tulee näkyä palvelimen etusivulla (localhost). HTML:n tulee olla jonkun käyttäjän kotihakemistossa, ja olla muokattavissa normaalin käyttäjän oikeuksin, ilman sudoa.
