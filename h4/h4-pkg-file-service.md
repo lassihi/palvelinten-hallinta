@@ -118,7 +118,7 @@ Curl-tulosteen perusteella tämä onnistui.
 
 ## b) SSHouto. Lisää uusi portti, jossa SSHd kuuntelee.
 
-### Ensin käsin vm01:lle
+### Ensin manuaalisesti vm01:lle
 
 Systemd näyttää, että ssh on aktiivinen ja kuuntelee porttia 22.
 
@@ -186,4 +186,144 @@ Systemd näytti, että vm02:n sshd kuuntelee portteja 22 ja 2222.
 
 ## c) Vapaaehtoinen, haastavahko tässä vaiheessa: Asenna ja konfiguroi Apache ja Name Based Virtual Host. Sen tulee näyttää palvelimen etusivulla weppisivua. Weppisivun tulee olla muokattavissa käyttäjän oikeuksin, ilman sudoa.
 
-## d) Vapaaehtoinen, haastava: Caddy. Asenna Caddy tarjoilemaan weppisivua. Weppisivun tulee näkyä palvelimen etusivulla (localhost). HTML:n tulee olla jonkun käyttäjän kotihakemistossa, ja olla muokattavissa normaalin käyttäjän oikeuksin, ilman sudoa.
+### Manuaalisesti vm01:lle
+Loin Apachelle uuden sivun konfiguraatiotiedoston sijaintiin `/etc/apache2/sites-available`.
+
+![image](https://github.com/user-attachments/assets/b6b03851-7be5-4564-b0ae-2b7329378c74)
+
+![image](https://github.com/user-attachments/assets/456ecf1d-d3b0-4671-a353-7b07c272a725)
+
+Otin käyttöön uuden asetustiedoston "h4c" ja poistin käytöstä oletussivun "000-default", jonka jälkeen potkaisin apachea
+
+    sudo a2ensite h4c.conf
+    sudo a2dissite 000-default.conf
+    sudo systemctl restart apache2
+
+Loin asetustiedostossa määrittelemäni polun.
+
+    mkdir -p /home/vagrant/public_sites/h4c.com
+
+Loin index.html-tiedoston, jonne kirjoitin "testisivu", ilman sudoa.
+
+    echo testisivu > /home/vagrant/public_sites/h4c.com/index.html
+
+Testasin curlilla, että sivu päivittyi.
+
+![image](https://github.com/user-attachments/assets/d78a0187-2a3f-4978-a1f2-5a6cd6b0d0d5)
+
+### Orjalle pkg-file-service:n avulla
+
+Loin uuden salt-moduulin.
+
+    sudo mkdir -p /srv/salt/NBVH
+
+Loin moduuliin init.sls-tiedoston, jonka määrityksessä käytin apuna dokumentaatiota Saltin [apache.configfile](https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html#salt.states.apache.configfile) ja [apache_site.enabled](https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache_site.html) tiloista.
+
+    sudoedit /srv/salt/NBVH/init.sls
+    
+![image](https://github.com/user-attachments/assets/74df661a-3fc5-4e57-9835-ab3b3c9c81a2)
+
+Tiivistettynä tiedosto...
+* varmistaa, että apache on asennettuna
+* käyttää Saltin sisäänrakennettua apache.configfile-tilaa konfiguraatioon
+* varmistaa, että oikea polku ja index.html ovat olemassa tarvittavilla oikeuksilla
+* varmistaa, että luotu konfiguraatiotiedosto on käytössä
+* varmistaa, että oletus konfiguraatiotiedosto ei ole käytössä
+* varmistaa, että demoni on päällä ja uudelleenkäynnistää sen jos konfiguraatiotiedostoa muutetaan
+
+Tilan on tarkoitetus luoda käyttäjälle "vagrant" tyhjä index.html-tiedosto, jota tämä voi muokata ilman pääkäyttäjän oikeuksia. Index.html-tiedostoon tehdyt muutokset pitäisivät näkyä heti Apachen verkkosivulla.
+
+Ennen tilan ajoa testasin, että orjalla on vielä aiemmin asetettu sivu käytössä
+
+![image](https://github.com/user-attachments/assets/fd6fbea9-7851-48f4-8631-61ab3d7b32c7)
+
+Sivu ei ollut vaihtunut mihinkään, joten ajoin tilan. Alla ajon tulokset.
+
+![image](https://github.com/user-attachments/assets/375992ea-f234-402e-8bb3-3879a5089119)
+
+Tulosten perusteella kaikki muut tilat onnistuttiin saavuttamaan, paitsi tilafunktiot `apache_site.enabled` ja `service.running`. Yhteistä näillä tilafunktioilla oli, että ne molemmat vaativat tiedoston `/etc/apache2/sites-available/h4c.conf` olemassaolon. Tulosteen perusteella kumpikaan ei tiedostoa löytänyt, vaikka `apache.configfile` tilafunktio suoritettiin onnistuneesti.
+
+Menin vm02:lle tarkastamaan, onko tiedostoa olemassa.
+
+![image](https://github.com/user-attachments/assets/b5a6bbb0-5b75-49df-b0d7-cb1f97f8009f)
+
+Vertasin seuraavaksi omaa init.sls-tiedoston `apache.configfile`-tilafunktiota ja [dokumentaation](https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html) esimerkkiä ja huomasin, että sisennykset, eivät aivan täsmää omassa tilafunktiossani. Alla muokattu tilafunktio oikeilla sisennyksillä.
+
+![image](https://github.com/user-attachments/assets/00825e2f-1d87-4fd1-bd45-0b52d1db17e8)
+
+Ajoin tilan uudelleen.
+
+![image](https://github.com/user-attachments/assets/240c0d6e-2ee4-40a6-8aeb-b48b51f48a01)
+
+Tällä kertaa myös `apache_site.enabled` saavutettiin, eli h4c.conf otettiin käyttöön. Vain viimeinen tilafunktio `service.running` epäonnistui, sillä tiedostoa /etc/apache2/sites-available/h4c.conf ei löytynyt.
+
+Löysin Saltin dokumentaatiosta kohdan, jossa käytetään hyvin samanlaista tilafunktiota kuin omassa init.sls-tiedostossani.
+https://docs.saltproject.io/en/3006/ref/states/requisites.html#requisites
+![image](https://github.com/user-attachments/assets/3a5f0ecb-c93e-4e82-8db1-ee47db242b68)
+
+Muutin omaa tiedostoani tämän perusteella.
+
+![image](https://github.com/user-attachments/assets/7ec7a4e5-c6b0-4ccf-b569-ddd096f473d2)
+
+Ajoin tilan ja sain edelleen virheen viimeisestä tilafunktiosta. 
+
+Käännyin tässä kohtaa tekoälyn puoleen ja kysyin ChatGPT 4o mallilta apua. Promptiin liitin init.sls tiedoston ja ilmoitin, että service.running antaa virheen.
+
+![image](https://github.com/user-attachments/assets/e51e0cd9-80c4-49d3-a0bc-6bcd2f1ca9ba)
+
+Muutin tiedoston vastaamaan tämän ehdotusta.
+
+![image](https://github.com/user-attachments/assets/1ecb4753-c235-4912-9629-663210247ab8)
+
+Ajoin tilan ja sain virheen.
+
+![image](https://github.com/user-attachments/assets/0c13b8e7-b5e5-4f29-98a9-8d5e07d0199d)
+
+Käytin virheilmoituksen ehdotusta ja muutin init.sls tiedostoa.
+
+![image](https://github.com/user-attachments/assets/a17af82c-4f2f-40df-a158-241122ea0e2f)
+
+Ajoin tilan.
+
+![image](https://github.com/user-attachments/assets/eade3240-4cdb-42cc-8f1b-9fe2c536209e)
+
+Tila saavutettiin vihdoin.
+
+Siirryin vm02:lle muokkaamaan index.html-tiedostoa.
+
+![image](https://github.com/user-attachments/assets/bdb64772-bd1c-401c-ad6c-e383a2110ddf)
+
+![image](https://github.com/user-attachments/assets/b7fdd1bb-20cb-4614-9281-497b43e20919)
+
+Tallensin teidoston ja testasin curlilla.
+
+![image](https://github.com/user-attachments/assets/084adea9-d6c4-4b7f-b3d8-ce9ec458ab8a)
+
+Sain yhä vanhan sivun näkyviin.
+
+Siirryin vm01:lle ja tutkimaan init.sls-tiedostoa ja huomasin kirjoitusvirheen.
+
+![image](https://github.com/user-attachments/assets/ea4288df-509d-4c69-86e6-788dce837517)
+
+Korjasin tämän.
+
+![image](https://github.com/user-attachments/assets/dd2fe5a7-45a8-49d1-a3b8-5844fcc20c21)
+
+Ajoin tilan uudestaan ja testasin curlilla sivun toiminnan.
+
+![image](https://github.com/user-attachments/assets/6c84af96-ee34-4478-9b4b-bff56629a94a)
+
+Vihdoin tila näyttäisi toimivan. Siiryin vielä kerran vm02:lle testaamaan, että index.html-tiedostoon tehdyt muutokset astuvat voimaan oiken.
+
+![image](https://github.com/user-attachments/assets/c21d7829-155d-43b2-b897-04b32c4c4476)
+
+Muutokset ilman sudoa päivittyivät kotisivulle, joten tila toimii.
+
+## Lähteet
+Karvinen 2025: palvelinten hallinta: https://terokarvinen.com/palvelinten-hallinta/
+
+Karvinen 2018: Pkg-File-Service – Control Daemons with Salt – Change SSH Server Port: https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh
+
+VMWare Inc 2025: SALT.STATES.APACHE: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html#module-salt.states.apache
+
+VMWare Inc 2025: SALT.STATES.APACHE_SITE: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache_site.html
