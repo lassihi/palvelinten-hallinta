@@ -27,7 +27,7 @@ Yhdistin virtuaalikoneeseen vm01.
 
     vagrant ssh vm01
 
-### Apache manuaalisesti vm01:lle
+### Ensin manuaalisesti vm01:lle
 
 Avasin curlilla localhost-sivun osoittaakseni, että Apachea ei ole vielä asennettu.
 
@@ -50,7 +50,7 @@ Muutos ei vaadi demonin uudelleenkäynnistämistä, joten tarkastin muutokset cu
 
 ![image](https://github.com/user-attachments/assets/7eb4c53f-b547-4600-8e22-fdd47d6b2710)
 
-### Apache pkg-file-service:n avulla orjalle
+### pkg-file-service:n avulla orjalle
 Orjana toimiva vm02 virtuaalikone käynnistyi, kun tehtävän alussa ajoin komennon `vagrant up`, joten sitä ei erikseen tarvitse enää käynnistää.
 
 Loin masterina toimivalla vm01:lle uuden moduulin "apache2" sijaintiin `/srv/salt/`
