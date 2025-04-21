@@ -193,7 +193,7 @@ Loin Apachelle uuden sivun konfiguraatiotiedoston sijaintiin `/etc/apache2/sites
 
 ![image](https://github.com/user-attachments/assets/456ecf1d-d3b0-4671-a353-7b07c272a725)
 
-Otin käyttöön uuden asetustiedoston "h4c" ja poistin käytöstä oletussivun "000-default", jonka jälkeen potkaisin apachea
+Otin käyttöön uuden asetustiedoston "h4c.conf" ja poistin käytöstä oletussivun "000-default.conf", jonka jälkeen potkaisin apachea
 
     sudo a2ensite h4c.conf
     sudo a2dissite 000-default.conf
@@ -247,7 +247,7 @@ Menin vm02:lle tarkastamaan, onko tiedostoa olemassa.
 
 ![image](https://github.com/user-attachments/assets/b5a6bbb0-5b75-49df-b0d7-cb1f97f8009f)
 
-Vertasin seuraavaksi omaa init.sls-tiedoston `apache.configfile`-tilafunktiota ja [dokumentaation](https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html) esimerkkiä ja huomasin, että sisennykset, eivät aivan täsmää omassa tilafunktiossani. Alla muokattu tilafunktio oikeilla sisennyksillä.
+Tiedostoa ei löytynyt, joten vertasin seuraavaksi omaa init.sls-tiedoston `apache.configfile`-tilafunktiota ja [dokumentaation](https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html) esimerkkiä ja huomasin, että sisennykset eivät aivan täsmää omassa tilafunktiossani. Alla muokattu tilafunktio oikeilla sisennyksillä.
 
 ![image](https://github.com/user-attachments/assets/00825e2f-1d87-4fd1-bd45-0b52d1db17e8)
 
@@ -257,7 +257,7 @@ Ajoin tilan uudelleen.
 
 Tällä kertaa myös `apache_site.enabled` saavutettiin, eli h4c.conf otettiin käyttöön. Vain viimeinen tilafunktio `service.running` epäonnistui, sillä tiedostoa /etc/apache2/sites-available/h4c.conf ei löytynyt.
 
-Löysin Saltin dokumentaatiosta kohdan, jossa käytetään hyvin samanlaista tilafunktiota kuin omassa init.sls-tiedostossani.
+Löysin Saltin dokumentaatiosta kohdan, jossa käytetään hyvin samanlaista `service.running` tilafunktiota kuin omassa init.sls-tiedostossani.
 https://docs.saltproject.io/en/3006/ref/states/requisites.html#requisites
 ![image](https://github.com/user-attachments/assets/3a5f0ecb-c93e-4e82-8db1-ee47db242b68)
 
@@ -267,7 +267,7 @@ Muutin omaa tiedostoani tämän perusteella.
 
 Ajoin tilan ja sain edelleen virheen viimeisestä tilafunktiosta. 
 
-Käännyin tässä kohtaa tekoälyn puoleen ja kysyin ChatGPT 4o mallilta apua. Promptiin liitin init.sls tiedoston ja ilmoitin, että service.running antaa virheen.
+Käännyin tässä kohtaa tekoälyn puoleen ja kysyin ChatGPT 4o-mallilta apua. Promptiin liitin init.sls tiedoston ja ilmoitin, että service.running antaa virheen.
 
 ![image](https://github.com/user-attachments/assets/e51e0cd9-80c4-49d3-a0bc-6bcd2f1ca9ba)
 
@@ -299,9 +299,9 @@ Tallensin teidoston ja testasin curlilla.
 
 ![image](https://github.com/user-attachments/assets/084adea9-d6c4-4b7f-b3d8-ce9ec458ab8a)
 
-Sain yhä vanhan sivun näkyviin.
+Uutta index.html-tiedostoa ei tullut näkyviin niin kuin olisi pitänyt.
 
-Siirryin vm01:lle ja tutkimaan init.sls-tiedostoa ja huomasin kirjoitusvirheen.
+Siirryin vm01:lle tutkimaan init.sls-tiedostoa ja huomasin puuttuvan kaksoispisteen kohdassa `'*80'`.
 
 ![image](https://github.com/user-attachments/assets/ea4288df-509d-4c69-86e6-788dce837517)
 
@@ -309,7 +309,9 @@ Korjasin tämän.
 
 ![image](https://github.com/user-attachments/assets/dd2fe5a7-45a8-49d1-a3b8-5844fcc20c21)
 
-Ajoin tilan uudestaan ja testasin curlilla sivun toiminnan.
+Ajoin tilan uudestaan `sudo salt "*" state.apply NBVH`, sillä olin muokannut konfiguraatiota. Tila saavutettiin jälleen.
+
+Testasin, sivun toiminnan curlilla.
 
 ![image](https://github.com/user-attachments/assets/6c84af96-ee34-4478-9b4b-bff56629a94a)
 
@@ -324,6 +326,8 @@ Karvinen 2025: palvelinten hallinta: https://terokarvinen.com/palvelinten-hallin
 
 Karvinen 2018: Pkg-File-Service – Control Daemons with Salt – Change SSH Server Port: https://terokarvinen.com/2018/04/03/pkg-file-service-control-daemons-with-salt-change-ssh-server-port/?fromSearch=karvinen%20salt%20ssh
 
-VMWare Inc 2025: SALT.STATES.APACHE: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html#module-salt.states.apache
+VMWare Inc 2025: salt.states.apache: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache.html#module-salt.states.apache
 
-VMWare Inc 2025: SALT.STATES.APACHE_SITE: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache_site.html
+VMWare Inc 2025: salt.states.apache_site: https://docs.saltproject.io/en/3006/ref/states/all/salt.states.apache_site.html
+
+VMWare Inc 2025: Requisites and Other Global State Arguments: https://docs.saltproject.io/en/3006/ref/states/requisites.html#requisites
